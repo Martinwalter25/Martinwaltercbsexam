@@ -22,7 +22,7 @@ Your SQL file upload successfully.
 ## Solr Opsætning
 Create a collection in solr
 ```
-curl -X POST "http://[IP]:8983/solr/[COLLECTION]/update?commit=true&separator=,&fieldnames=id,title,author,description&overwrite=true" --data-binary @solrData.csv  -H 'Content-type:application/csv'
+curl -X POST "http://localhost:8983/solr/martin/update?commit=true&separator=,&fieldnames=id,title,author,description&overwrite=true" --data-binary @solrData.csv  -H 'Content-type:application/csv'
 ```
 Make sure you are in the `cbsexam` directory when running the command above
 
