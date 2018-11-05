@@ -1,8 +1,8 @@
 package controllers;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import cache.UserCache;
 import model.User;
 import utils.Hashing;
 import utils.Log;
@@ -67,6 +67,8 @@ public class UserController {
 
     // Build SQL
     String sql = "SELECT * FROM user";
+    UserCache userCache = new UserCache();
+    userCache.getUsers(true);
 
     // Do the query and initialyze an empty list for use if we don't get results
     ResultSet rs = dbCon.query(sql);
