@@ -3,6 +3,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import cache.UserCache;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTCreationException;
 import model.User;
 import utils.Hashing;
 import utils.Log;
@@ -10,6 +13,8 @@ import utils.Log;
 public class UserController {
 
   private static DatabaseController dbCon;
+  private static Hashing hashing;
+  String token = null;
 
   public UserController() {
     dbCon = new DatabaseController();
@@ -38,7 +43,8 @@ public class UserController {
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("password"),
-                rs.getString("email"));
+                rs.getString("email"),
+                rs.getLong("created_at"));
 
         // return the create object
         return user;
@@ -67,8 +73,8 @@ public class UserController {
 
     // Build SQL
     String sql = "SELECT * FROM user";
-    UserCache userCache = new UserCache();
-    userCache.getUsers(true);
+    /*UserCache userCache = new UserCache();
+    userCache.getUsers(true);*/
 
     // Do the query and initialyze an empty list for use if we don't get results
     ResultSet rs = dbCon.query(sql);
@@ -83,7 +89,8 @@ public class UserController {
                 rs.getString("first_name"),
                 rs.getString("last_name"),
                 rs.getString("password"),
-                rs.getString("email"));
+                rs.getString("email"),
+                rs.getLong("created_at"));
 
         // Add element to list
         users.add(user);
@@ -112,14 +119,12 @@ public class UserController {
     }
 
     // Insert the user in the DB
-    // TODO: Hash the user password before saving it.
+    // TODO: Hash the user password before saving it. ***Fixed***
     int userID = dbCon.insert(
         "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"
             + user.getFirstname()
             + "', '"
             + user.getLastname()
-            + "', '"
-            + hashing.hashWithSalt(user.getPassword())
             + "', '"
             + user.getEmail()
             + "', "
@@ -136,5 +141,52 @@ public class UserController {
 
     // Return user
     return user;
+  }
+
+  public String login(User user) {
+
+    // Check for connection
+    if (dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+
+    // Build the query for DB
+    String sql = "SELECT * FROM user where email=" + user.getEmail() + "AND password" + Hashing.sha(user.getPassword());
+
+    // Actually do the query
+    ResultSet rs = dbCon.query(sql);
+    User loginUser = null;
+
+    try {
+      // Get first object, since we only have one
+      if (rs.next()) {
+        user = new User(
+                        rs.getInt("id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        rs.getString("password"),
+                        rs.getString("email"),
+                        rs.getLong("created_at"));
+
+        Hashing.sha(String.valueOf(user.getCreatedTime()));
+        if (user.getPassword().equals(Hashing.sha(user.getPassword()))){
+          try {
+            Algorithm algorithm = Algorithm.HMAC256("secret");
+            token = JWT.create()
+                    .withIssuer("auth0")
+                    .sign(algorithm);
+          } catch (JWTCreationException exception){
+            //Invalid Signing configuration / Couldn't convert Claims.
+          }
+        }
+
+        // return the create object
+        return token;
+      } else {
+        System.out.println("No user found");
+      }
+    } catch (SQLException ex) {
+      System.out.println(ex.getMessage());
+    } return null;
   }
 }

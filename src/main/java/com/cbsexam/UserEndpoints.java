@@ -16,7 +16,13 @@ import utils.Log;
 
 @Path("user")
 public class UserEndpoints {
-  UserCache userCache = new UserCache();
+  private static UserCache userCache;
+  private static UserController userController;
+
+  public UserEndpoints() {
+    this.userCache = new UserCache();
+    this.userController = new UserController();
+  }
 
   /**
    * @param idUser
@@ -80,11 +86,29 @@ public class UserEndpoints {
     }
   }
 
-  // TODO: Make the system able to login users and assign them a token to use throughout the system.
+  // TODO: Make the system able to login users and assign them a token to use throughout the system. ***Fixed***
   @POST
   @Path("/login")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response loginUser(String x) {
+  public Response loginUser(String body) {
+
+    User user = new Gson().fromJson(body, User.class);
+
+    String token = userController.login(user);
+
+    try {
+
+    if (token != null) {
+      // Return a response with status 200 and JSON as type
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+    } else {
+      return Response.status(400).entity("Could not create user").build();
+    }
+  }   catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+
+
 
     // Return a response with status 200 and JSON as type
     return Response.status(400).entity("Endpoint not implemented yet").build();

@@ -3,11 +3,11 @@ package cache;
 import controllers.UserController;
 import model.User;
 import utils.Config;
-
 import java.util.ArrayList;
 
-//TODO: Build this cache and use it.
+//TODO: Build this cache and use it. ***Fixed***
 public class UserCache {
+
     // List of users
     private ArrayList<User> users;
 
@@ -28,7 +28,7 @@ public class UserCache {
         // If the list is empty we also check for new users
         if (forceUpdate
                 || ((this.created + this.ttl) >= (System.currentTimeMillis() / 1000L))
-                || this.users.isEmpty()) {
+                || this.users == null) {
 
             // Get users from controller, since we wish to update.
             ArrayList<User> users = UserController.getUsers();

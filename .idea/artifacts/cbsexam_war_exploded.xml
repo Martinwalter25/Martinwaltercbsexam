@@ -44,6 +44,11 @@
           <element id="library" level="project" name="Maven: org.glassfish.jersey.core:jersey-common:2.23" />
           <element id="library" level="project" name="Maven: org.glassfish.jersey.core:jersey-server:2.23" />
           <element id="library" level="project" name="Maven: org.javassist:javassist:3.18.1-GA" />
+          <element id="library" level="project" name="Maven: com.auth0:java-jwt:3.4.1" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.9.0" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.9.7" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.9.7" />
+          <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.11" />
         </element>
       </element>
     </root>
