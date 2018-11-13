@@ -13,7 +13,6 @@ public class OrderController {
 
   private static DatabaseController dbCon;
 
-
   public OrderController() {
     dbCon = new DatabaseController();
   }
