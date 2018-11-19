@@ -1,9 +1,7 @@
 package utils;
-
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import model.User;
 import org.bouncycastle.util.encoders.Hex;
 

@@ -8,8 +8,10 @@ public final class Encryption {
     if (Config.getEncryption()) {
 
       // The key is predefined and hidden in code
-      // TODO: Create a more complex code and store it somewhere better
-      char[] key = {'C', 'B', 'S'};
+      // TODO: Create a more complex code and store it somewhere better ***Fixed***
+      // KEY has been changed from C' B' S' to a new password saved in config.json, and has become more complex through the usage of CharArray instead of string
+      String encryptionKey = Config.getENCRYPTIONKEY();
+      char[] key = encryptionKey.toCharArray();
 
       // Stringbuilder enables you to play around with strings and make useful stuff
       StringBuilder thisIsEncrypted = new StringBuilder();

@@ -167,14 +167,11 @@ public class UserController {
                         rs.getString("password"),
                         rs.getString("email"),
                         rs.getLong("created_at"));
+        {
 
-        Hashing.sha(String.valueOf(user.getCreatedTime()));
-        if (user.getPassword().equals(Hashing.sha(user.getPassword()))){
           try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
-            token = JWT.create()
-                    .withIssuer("auth0")
-                    .sign(algorithm);
+            token = JWT.create().withIssuer("auth0").sign(algorithm);
           } catch (JWTCreationException exception){
             //Invalid Signing configuration / Couldn't convert Claims.
           }
