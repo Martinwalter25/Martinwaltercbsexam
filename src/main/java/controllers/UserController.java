@@ -2,7 +2,6 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import cache.UserCache;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
@@ -73,8 +72,6 @@ public class UserController {
 
     // Build SQL
     String sql = "SELECT * FROM user";
-    /*UserCache userCache = new UserCache();
-    userCache.getUsers(true);*/
 
     // Do the query and initialyze an empty list for use if we don't get results
     ResultSet rs = dbCon.query(sql);
@@ -184,6 +181,7 @@ public class UserController {
       }
     } catch (SQLException ex) {
       System.out.println(ex.getMessage());
-    } return null;
+    }
+    return null;
   }
 }

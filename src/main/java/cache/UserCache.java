@@ -17,9 +17,7 @@ public class UserCache {
     // Sets when the cache has been created
     private long created;
 
-    public UserCache() {
-        this.ttl = Config.getUserTtl();
-    }
+    public UserCache() { this.ttl = Config.getUserTtl(); }
 
     public ArrayList<User> getUsers(Boolean forceUpdate) {
 

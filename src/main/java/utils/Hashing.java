@@ -63,13 +63,5 @@ public final class Hashing {
     return rawString;
   }
 
- /* public String hashWithSalt(String str){
-    String salt = str+this.salt;
-    return md5(salt);
-  }
-
-  public void setSalt(String salt) {
-    this.salt = salt;
-  } */
 }
 
