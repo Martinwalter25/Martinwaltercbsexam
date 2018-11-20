@@ -7,8 +7,6 @@ import org.bouncycastle.util.encoders.Hex;
 
 public final class Hashing {
 
-  //private String salt = "Salt";
-
   // TODO: You should add a salt and make this secure
   public static String md5(String rawString) {
     try {
@@ -45,7 +43,10 @@ public final class Hashing {
       // We load the hashing algoritm we wish to use.
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
 
-      rawString = rawString + User.getCreatedTime();
+      // We make this more secure by saving it in config
+      String salt = Config.getHashWithSalt();
+
+      rawString = rawString + User.getCreatedTime() + salt;
 
       // We convert to byte array
       byte[] hash = digest.digest(rawString.getBytes(StandardCharsets.UTF_8));

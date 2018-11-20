@@ -12,7 +12,6 @@ import utils.Log;
 public class UserController {
 
   private static DatabaseController dbCon;
-  private static Hashing hashing;
   String token = null;
 
   public UserController() {

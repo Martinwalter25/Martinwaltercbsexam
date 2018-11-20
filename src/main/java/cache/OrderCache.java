@@ -9,7 +9,6 @@ import java.util.ArrayList;
 public class OrderCache {
 
     // List of orders
-
     private ArrayList<Order> orders;
 
     // Time cache should live

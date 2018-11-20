@@ -3,7 +3,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import cache.OrderCache;
 import model.Address;
 import model.LineItem;
 import model.Order;
@@ -35,7 +34,7 @@ public class OrderController {
     try {
       if (rs.next()) {
 
-        // Perhaps we could optimize things a bit here and get rid of nested queries.
+        // TODO: Perhaps we could optimize things a bit here and get rid of nested queries.
         User user = UserController.getUser(rs.getInt("user_id"));
         ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
         Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));
@@ -85,7 +84,7 @@ public class OrderController {
     try {
       while (rs.next()) {
 
-        // Perhaps we could optimize things a bit here and get rid of nested queries.
+        // TODO: Perhaps we could optimize things a bit here and get rid of nested queries.
         User user = UserController.getUser(rs.getInt("user_id"));
         ArrayList<LineItem> lineItems = LineItemController.getLineItemsForOrder(rs.getInt("id"));
         Address billingAddress = AddressController.getAddress(rs.getInt("billing_address_id"));

@@ -2,16 +2,12 @@ package controllers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import cache.ProductCache;
 import model.Product;
 import utils.Log;
 
 public class ProductController {
 
-
-
   private static DatabaseController dbCon;
-
 
   public ProductController() {
     dbCon = new DatabaseController();
