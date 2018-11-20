@@ -115,12 +115,14 @@ public class UserController {
     }
 
     // Insert the user in the DB
-    // TODO: Hash the user password before saving it. ***Fixed***
+    // TODO: Hash the user password before saving it
     int userID = dbCon.insert(
         "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"
             + user.getFirstname()
             + "', '"
             + user.getLastname()
+                + "', '"
+                + Hashing.sha(user.getPassword())
             + "', '"
             + user.getEmail()
             + "', "
@@ -147,7 +149,7 @@ public class UserController {
     }
 
     // Build the query for DB
-    String sql = "SELECT * FROM user where email=" + user.getEmail() + "AND password" + Hashing.sha(user.getPassword());
+    String sql = "SELECT * FROM user where email='" + user.getEmail() + "' AND password='" + Hashing.sha(user.getPassword()) + "'";
 
     // Actually do the query
     ResultSet rs = dbCon.query(sql);
@@ -156,7 +158,7 @@ public class UserController {
     try {
       // Get first object, since we only have one
       if (rs.next()) {
-        user = new User(
+        loginUser = new User(
                         rs.getInt("id"),
                         rs.getString("first_name"),
                         rs.getString("last_name"),
@@ -167,7 +169,7 @@ public class UserController {
 
           try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
-            token = JWT.create().withIssuer("auth0").sign(algorithm);
+            token = JWT.create().withIssuer("auth0").withClaim("userId", loginUser.getId()).sign(algorithm);
           } catch (JWTCreationException exception){
             //Invalid Signing configuration / Couldn't convert Claims.
           }
