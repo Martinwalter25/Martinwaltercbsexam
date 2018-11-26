@@ -159,7 +159,9 @@ public class UserController {
 
     // Actually do the query
     ResultSet rs = dbCon.query(sql);
-    User loginUser = null;
+    User loginUser;
+
+    String token = "";
 
     try {
       // Get first object, since we only have one
@@ -207,51 +209,48 @@ public class UserController {
     return user;
   }
 
+  public static User update (User user) {
+    if (dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+    try {
+      PreparedStatement updateUser = dbCon.getConnection().prepareStatement("UPDATE user SET first_name = ?, last_name = ?, password = ?, email = ? WHERE id = ?");
+
+      updateUser.setString(1, user.getFirstname());
+      updateUser.setString(2, user.getLastname());
+      updateUser.setString(3, user.getPassword());
+      updateUser.setString(4, user.getEmail());
+      updateUser.setInt(5, user.getId());
+
+      updateUser.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return user;
+  }
+
   public static String getTokenVerifier(User user) {
     //Check for connection
     if (dbCon == null) {
       dbCon = new DatabaseController();
     }
 
-    //Build the query for DB
-    String sql = "SELECT * FROM user WHERE id=" + user.getId();
-
-    //Actually do the query
-    ResultSet rs = dbCon.query(sql);
-    User sessionToken;
     String token = user.getToken();
 
     try {
-      if (rs.next()) {
-        sessionToken =
-                new User(
-                        rs.getInt("id"),
-                        rs.getString("first_name"),
-                        rs.getString("last_name"),
-                        rs.getString("password"),
-                        rs.getString("email"),
-                        rs.getLong("created_at"));
+      Algorithm algorithm = Algorithm.HMAC256("secret");
+      JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build();
+      DecodedJWT jwt = verifier.verify(token);
+      Claim claim = jwt.getClaim("userID");
 
-        if (sessionToken != null) {
-          try {
-            Algorithm algorithm = Algorithm.HMAC256("secret");
-            JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build();
-            DecodedJWT jwt = verifier.verify(token);
-            Claim claim = jwt.getClaim("userID");
-
-            if (user.getId() == claim.asInt()) {
-              return token;
-            }
-
-          } catch (JWTVerificationException e) {
-            System.out.println(e.getMessage());
-          }
-        }
-      } else {
-        System.out.println("No user found");
+      if (user.getId() == claim.asInt()) {
+        return token;
       }
-    } catch (SQLException ex) {
-      System.out.println(ex.getMessage());
-    } return "";
+
+    } catch (JWTVerificationException e) {
+      System.out.println(e.getMessage());
+    }
+    return "";
   }
 }
+

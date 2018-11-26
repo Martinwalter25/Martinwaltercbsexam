@@ -50,7 +50,9 @@ public class UserEndpoints {
     }
   }
 
-  /** @return Responses */
+  /**
+   * @return Responses
+   */
   @GET
   @Path("/")
   public Response getUsers() {
@@ -105,15 +107,15 @@ public class UserEndpoints {
 
     try {
 
-    if (token != null) {
-      // Return a response with status 200 and JSON as type
-      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
+      if (token != null) {
+        // Return a response with status 200 and JSON as type
+        return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(token).build();
 
-    } else {
-      return Response.status(400).entity("Could not login user").build();
+      } else {
+        return Response.status(400).entity("Could not login user").build();
 
-    }
-  }   catch (Exception e) {
+      }
+    } catch (Exception e) {
       System.out.println(e.getMessage());
     }
 
@@ -138,14 +140,25 @@ public class UserEndpoints {
     } else
       // Return a response with status 200 and JSON as type
       return Response.status(400).entity("").build();
-    }
-
+  }
 
 
   // TODO: Make the system able to update users
-  public Response updateUser(String x) {
+  @POST
+  @Path("/update")
+  @Consumes(MediaType.APPLICATION_JSON)
 
-    // Return a response with status 200 and JSON as type
-    return Response.status(400).entity("Endpoint not implemented yet").build();
+  public Response updateUser(String body) {
+
+    User user = new Gson().fromJson(body, User.class);
+    String token = UserController.getTokenVerifier(user);
+
+    if (token != "") {
+      UserController.update(user);
+      // Return a response with status 200 and JSON as type
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("User has been updated").build();
+    } else
+      // Return a respone with status 400 and JSON as type
+      return Response.status(400).entity("").build();
   }
 }
