@@ -177,7 +177,10 @@ public class UserController {
 
           try {
             Algorithm algorithm = Algorithm.HMAC256("secret");
-            token = JWT.create().withIssuer("auth0").withClaim("userId", loginUser.getId()).sign(algorithm);
+            token = JWT.create()
+                    .withIssuer("auth0")
+                    .withClaim("userId", loginUser.getId())
+                    .sign(algorithm);
           } catch (JWTCreationException exception) {
             //Invalid Signing configuration / Couldn't convert Claims.
           }
@@ -241,7 +244,7 @@ public class UserController {
       Algorithm algorithm = Algorithm.HMAC256("secret");
       JWTVerifier verifier = JWT.require(algorithm).withIssuer("auth0").build();
       DecodedJWT jwt = verifier.verify(token);
-      Claim claim = jwt.getClaim("userID");
+      Claim claim = jwt.getClaim("userId");
 
       if (user.getId() == claim.asInt()) {
         return token;
