@@ -42,8 +42,12 @@ public class UserEndpoints {
     json = Encryption.encryptDecryptXOR(json);
 
     // Return the user with the status code 200
-    // TODO: What should happen if something breaks down?
-    return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+    // TODO: What should happen if something breaks down? ***Fixed***
+    if (user != null) {
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity(json).build();
+    } else {
+      return Response.status(400).entity("Could not find any users").build();
+    }
   }
 
   /** @return Responses */
@@ -117,11 +121,26 @@ public class UserEndpoints {
   }
 
   // TODO: Make the system able to delete users
-  public Response deleteUser(String x) {
+  @POST
+  @Path("/delete")
+  @Consumes(MediaType.APPLICATION_JSON)
 
-    // Return a response with status 200 and JSON as type
-    return Response.status(400).entity("Endpoint not implemented yet").build();
-  }
+  public Response deleteUser(String body) {
+
+    User user = new Gson().fromJson(body, User.class);
+
+    String token = UserController.getTokenVerifier(user);
+
+    if (token != null) {
+      UserController.deleteUser(user);
+
+      return Response.status(200).type(MediaType.APPLICATION_JSON_TYPE).entity("The user has been deleted").build();
+    } else
+      // Return a response with status 200 and JSON as type
+      return Response.status(400).entity("").build();
+    }
+
+
 
   // TODO: Make the system able to update users
   public Response updateUser(String x) {

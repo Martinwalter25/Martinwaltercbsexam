@@ -20,9 +20,7 @@ public class User {
     this.createdTime = createdTime;
   }
 
-  public int getId() {
-    return id;
-  }
+  public int getId() { return id; }
 
   public void setId(int id) {
     this.id = id;
@@ -63,4 +61,6 @@ public class User {
   public void setCreatedTime(long createdTime) {
     this.createdTime = createdTime;
   }
+
+
 }
