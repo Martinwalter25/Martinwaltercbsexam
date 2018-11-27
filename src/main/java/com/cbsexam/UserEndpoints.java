@@ -122,7 +122,7 @@ public class UserEndpoints {
     return null;
   }
 
-  // TODO: Make the system able to delete users
+  // TODO: Make the system able to delete users ***Fixed***
   @POST
   @Path("/delete")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -143,7 +143,7 @@ public class UserEndpoints {
   }
 
 
-  // TODO: Make the system able to update users
+  // TODO: Make the system able to update users ***Fixed***
   @POST
   @Path("/update")
   @Consumes(MediaType.APPLICATION_JSON)

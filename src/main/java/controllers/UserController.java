@@ -121,7 +121,7 @@ public class UserController {
     }
 
     // Insert the user in the DB
-    // TODO: Hash the user password before saving it
+    // TODO: Hash the user password before saving it ***Fixed***
     int userID = dbCon.insert(
             "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"
                     + user.getFirstname()
@@ -197,41 +197,6 @@ public class UserController {
     return null;
   }
 
-  public static User deleteUser(User user) {
-    if (dbCon == null) {
-      dbCon = new DatabaseController();
-    }
-    try {
-      PreparedStatement deleteUser = dbCon.getConnection().prepareStatement("DELETE FROM user WHERE id= ?");
-      deleteUser.setInt(1, user.getId());
-
-      deleteUser.executeUpdate();
-    } catch (SQLException sql) {
-      sql.getStackTrace();
-    }
-    return user;
-  }
-
-  public static User update (User user) {
-    if (dbCon == null) {
-      dbCon = new DatabaseController();
-    }
-    try {
-      PreparedStatement updateUser = dbCon.getConnection().prepareStatement("UPDATE user SET first_name = ?, last_name = ?, password = ?, email = ? WHERE id = ?");
-
-      updateUser.setString(1, user.getFirstname());
-      updateUser.setString(2, user.getLastname());
-      updateUser.setString(3, user.getPassword());
-      updateUser.setString(4, user.getEmail());
-      updateUser.setInt(5, user.getId());
-
-      updateUser.executeUpdate();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return user;
-  }
-
   public static String getTokenVerifier(User user) {
     //Check for connection
     if (dbCon == null) {
@@ -255,5 +220,41 @@ public class UserController {
     }
     return "";
   }
+
+  public static User deleteUser(User user) {
+    if (dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+    try {
+      PreparedStatement deleteUser = dbCon.getConnection().prepareStatement("DELETE FROM user WHERE id= ?");
+      deleteUser.setInt(1, user.getId());
+
+      deleteUser.executeUpdate();
+    } catch (SQLException sql) {
+      sql.getStackTrace();
+    }
+    return user;
+  }
+
+  public static User update(User user) {
+    if (dbCon == null) {
+      dbCon = new DatabaseController();
+    }
+    try {
+      PreparedStatement updateUser = dbCon.getConnection().prepareStatement("UPDATE user SET first_name = ?, last_name = ?, password = ?, email = ? WHERE id = ?");
+
+      updateUser.setString(1, user.getFirstname());
+      updateUser.setString(2, user.getLastname());
+      updateUser.setString(3, user.getPassword());
+      updateUser.setString(4, user.getEmail());
+      updateUser.setInt(5, user.getId());
+
+      updateUser.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return user;
+  }
+
 }
 
