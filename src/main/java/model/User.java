@@ -59,9 +59,7 @@ public class User {
 
   public static long getCreatedTime() { return createdTime; }
 
-  public void setCreatedTime(long createdTime) {
-    this.createdTime = createdTime;
-  }
+  public void setCreatedTime(long createdTime) { this.createdTime = createdTime; }
 
   public String getToken() { return token; }
 

@@ -1,4 +1,5 @@
 package controllers;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,7 +19,6 @@ import utils.Log;
 public class UserController {
 
   private static DatabaseController dbCon;
-  String token = null;
 
   public UserController() {
     dbCon = new DatabaseController();
@@ -107,8 +107,6 @@ public class UserController {
 
   public static User createUser(User user) {
 
-    Hashing hashing = new Hashing();
-
     // Write in log that we've reach this step
     Log.writeLog(UserController.class.getName(), user, "Actually creating a user in DB", 0);
 
@@ -122,13 +120,16 @@ public class UserController {
 
     // Insert the user in the DB
     // TODO: Hash the user password before saving it ***Fixed***
+
+    Hashing hashing = new Hashing();
+
     int userID = dbCon.insert(
             "INSERT INTO user(first_name, last_name, password, email, created_at) VALUES('"
                     + user.getFirstname()
                     + "', '"
                     + user.getLastname()
                     + "', '"
-                    + Hashing.sha(user.getPassword())
+                    + hashing.sha(user.getPassword())
                     + "', '"
                     + user.getEmail()
                     + "', "
@@ -160,7 +161,6 @@ public class UserController {
     // Actually do the query
     ResultSet rs = dbCon.query(sql);
     User loginUser;
-
     String token = "";
 
     try {
@@ -218,7 +218,7 @@ public class UserController {
     } catch (JWTVerificationException e) {
       System.out.println(e.getMessage());
     }
-    return "";
+    return null;
   }
 
   public static User deleteUser(User user) {

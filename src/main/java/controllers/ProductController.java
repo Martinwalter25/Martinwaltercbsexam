@@ -1,4 +1,5 @@
 package controllers;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -96,7 +97,7 @@ public class ProductController {
       dbCon = new DatabaseController();
     }
 
-    // TODO: Use caching layer. ***Fixed***
+    // TODO: Use caching layer. ***Er denne fixed??***
     String sql = "SELECT * FROM product";
 
     ResultSet rs = dbCon.query(sql);
